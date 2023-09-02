@@ -26,6 +26,7 @@ async function run() {
     await client.connect();
 
     const serviceCollection = client.db("car_doctor").collection("services");
+    const bookingCollection = client.db("car_doctor").collection("bookings");
 
     app.get("/services", async (req, res) => {
       const result = await serviceCollection.find().toArray();
@@ -36,6 +37,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await serviceCollection.findOne(query);
+      res.send(result);
+    });
+
+    // bookings
+    app.post("/bookings", async (req, res) => {
+      const booking = req.body;
+      const result = await bookingCollection.insertOne(booking);
       res.send(result);
     });
 
